@@ -11,6 +11,38 @@ class BreakoutViewController < UIViewController
     @bar.addGestureRecognizer(@barPanGestureRecognizer)
 
     view.addSubview(@bar)
+
+    radius = 10
+    @ball = UIView.alloc.initWithFrame([[(view.frame.size.width - radius) / 2, (view.frame.size.height - radius) / 2], [radius * 2, radius * 2]])
+    @ball.backgroundColor = UIColor.blackColor
+    @ball.layer.cornerRadius = radius
+
+    view.addSubview(@ball)
+
+    @balldx = 4
+    @balldy = 3
+
+    @timer = NSTimer.scheduledTimerWithTimeInterval(1.0/60, target: self,
+      selector: :loop, userInfo: nil, repeats: true)
+  end
+
+  def loop
+    # Move ball
+    width = view.frame.size.width
+    height = view.frame.size.height
+    frame = @ball.frame
+    radius = frame.size.width / 2
+
+    if frame.origin.x + @balldx + radius > width || frame.origin.x + @balldx < 0
+      @balldx = - @balldx
+    end
+    if frame.origin.y + @balldy + radius > height || frame.origin.y + @balldy < 0
+      @balldy = - @balldy
+    end
+
+    frame.origin.x += @balldx
+    frame.origin.y += @balldy
+    @ball.frame = frame
   end
 
   def barPanGesture(sender)
