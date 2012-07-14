@@ -36,7 +36,19 @@ class BreakoutViewController < UIViewController
     if frame.origin.x + @balldx + radius > width || frame.origin.x + @balldx < 0
       @balldx = - @balldx
     end
-    if frame.origin.y + @balldy + radius > height || frame.origin.y + @balldy < 0
+    if frame.origin.y + @balldy + radius > height
+      if frame.origin.x > @bar.frame.origin.x &&
+        frame.origin.x < @bar.frame.origin.x + @bar.frame.size.width
+        # Ball is within the bar
+        @balldy = - @balldy
+      else
+        # End the game
+        @timer.invalidate
+        alert = UIAlertView.alloc.initWithTitle("Game Over", message:nil,
+          delegate:nil, cancelButtonTitle:"Ok", otherButtonTitles:nil)
+        alert.show
+      end
+    elsif frame.origin.y + @balldy < 0
       @balldy = - @balldy
     end
 
